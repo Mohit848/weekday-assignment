@@ -4,6 +4,13 @@ import React from "react";
 const JobCardThemeProvider = ({ children }) => {
 	const theme = createTheme({
 		components: {
+			MuiPaper: {
+				styleOverrides: {
+					root: {
+						borderRadius: "20px",
+					},
+				},
+			},
 			MuiCard: {
 				styleOverrides: {
 					root: {
@@ -15,6 +22,19 @@ const JobCardThemeProvider = ({ children }) => {
 				styleOverrides: {
 					root: {
 						fontFamily: "Lexend",
+					},
+				},
+			},
+			MuiButton: {
+				styleOverrides: {
+					root: {
+						fontFamily: "Lexend",
+						textTransform: "none",
+						backgroundColor: "rgb(85, 239, 196)",
+						color: "black",
+						borderRadius: "8px",
+						fontWeight: 500,
+						padding: "8px",
 					},
 				},
 			},

@@ -6,33 +6,34 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CompanyInfo from "./companyinfo/CompanyInfo";
 import JobCardThemeProvider from "../../contexts/JobCardThemeProvider";
-import { Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import AboutCompany from "./aboutcompany/AboutCompany";
+import SalaryInfo from "./salaryinfo/SalaryInfo";
+import MinExperience from "./minimumexp/MinExperience";
+import EasyApplyButton from "./applybutton/EasyApplyButton";
 export const Jobcard = () => {
 	return (
 		<JobCardThemeProvider>
 			<Paper
 				elevation={2}
-				sx={{ width: "368px", height: "564px", borderRadius: "20px" }}
+				sx={{
+					width: "368px",
+					height: "auto",
+					margin: "20px",
+				}}
 			>
 				<Box>
 					<Card>
 						<CardContent>
 							<CompanyInfo />
-							<div>
-								<Typography variant="body2" fontWeight={300}>
-									Estimated Salary : {"₹30 - 50 LPA"} ✅
-								</Typography>
-							</div>
+							<SalaryInfo />
 							<AboutCompany />
-							<Typography variant="body2" color={"#8b8b8b"}>
-								Minimum Experience
-							</Typography>
-							<Typography variant="body2" fontWeight={300}>
-								{"4"} Years
-							</Typography>
+							<MinExperience />
 						</CardContent>
 					</Card>
+				</Box>
+				<Box display={"flex"} flexGrow={1}>
+					<EasyApplyButton>{"⚡ Easy Apply"}</EasyApplyButton>
 				</Box>
 			</Paper>
 		</JobCardThemeProvider>
