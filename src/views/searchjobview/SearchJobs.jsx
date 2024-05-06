@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Jobcard } from "../../components/jobcard/Jobcard";
+import { Box } from "@mui/material";
 
 const SearchJobs = () => {
 	const [loading, setLoading] = useState(false);
-	const [hasNext, setHasNext] = useState(false);
+	const [hasNext, setHasNext] = useState(true);
 	const [error, setError] = useState("");
 	const [jobs, setJobs] = useState([]);
 	const [totalJobs, setTotalJobs] = useState(0);
@@ -21,17 +22,19 @@ const SearchJobs = () => {
 			headers: myHeaders,
 			body,
 		};
-		const resp = await fetch(
-			`https://api.weekday.technology/adhoc/getSampleJdJSON`,
-			requestOptions
-		);
-		if (!resp.ok) {
-			setError(`Error occured with code - ${resp.status}`);
-		}
-		const data = await resp.json();
-		setLoading(false);
-
-		return data;
+		let resp = null;
+		try {
+			resp = await fetch(
+				`https://api.weekday.technology/adhoc/getSampleJdJSON`,
+				requestOptions
+			);
+			const data = await resp.json();
+			if (data.jdList + jobs.length >= totalJobs) {
+				setHasNext(false);
+			}
+			setLoading(false);
+			return data;
+		} catch (err) {}
 	};
 	useEffect(() => {
 		fetchJobs(10, 0).then((data) => {
@@ -44,9 +47,20 @@ const SearchJobs = () => {
 
 	return (
 		<div>
-			{jobs && <p>{jobs.length}</p>}
+			<Box
+				display={"flex"}
+				flexWrap="wrap"
+				justifyContent={"center"}
+				gap={1}
+			>
+				{jobs &&
+					jobs.map((job, i) => {
+						return <Jobcard key={i} {...job} />;
+					})}
+			</Box>
+
 			{totalJobs && <p>{totalJobs}</p>}
-			{error && <p>{error}</p>}
+			{error && <p>Error occured</p>}
 			{loading && <p>Loading...</p>}
 		</div>
 	);
