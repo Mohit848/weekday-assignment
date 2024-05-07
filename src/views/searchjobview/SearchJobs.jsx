@@ -5,6 +5,7 @@ import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import fetchJobs from "../../services/fetchJobs";
 import MultiSelectFilterDD from "../../components/dropdown/MultiSelectFilterDD";
 import Filter from "../../components/filter/Filter";
+import { minBasePay, minExperience } from "../../constants/filterOptions";
 
 const SearchJobs = () => {
 	const [loading, setLoading] = useState(true);
@@ -12,9 +13,65 @@ const SearchJobs = () => {
 	const [jobs, setJobs] = useState([]);
 	const [totalJobs, setTotalJobs] = useState(0);
 	const [hasNext, setHasNext] = useState(true);
-	const handleFilterUpdate = (name, optionArr) => {
-		console.log(name, " --- ", optionArr);
+	const [multiselectFilters, setMultiSelectFilters] = useState({
+		roles: [],
+		remote: [],
+		minExperience: 0,
+		minBasePay: 0,
+	});
+	const [filteredJobs, setFilteredJobs] = useState(jobs);
+
+	const runFilter = () => {
+		let temp = jobs;
+
+		temp = temp
+			.filter((job) => {
+				return (
+					multiselectFilters.roles.length === 0 ||
+					multiselectFilters.roles.includes(job.jobRole)
+				);
+			})
+			.filter((roles) => {
+				return (
+					multiselectFilters.remote.length === 0 ||
+					roles.location.toLowerCase() === "remote"
+				);
+			})
+			.filter((location) => {
+				return (
+					multiselectFilters.minExperience == 0 ||
+					location.minExp === null ||
+					parseInt(location.minExp) <=
+						parseInt(multiselectFilters.minExperience)
+				);
+			})
+			.filter((exp) => {
+				return (
+					multiselectFilters.minBasePay == 0 ||
+					!exp.minJdSalary === null ||
+					parseInt(exp.minJdSalary) >=
+						parseInt(multiselectFilters.minBasePay)
+				);
+			});
+		setFilteredJobs(temp);
 	};
+	const handleFilterUpdate = (name, optionArr, option) => {
+		if (name === "roles" || name === "remote") {
+			setMultiSelectFilters((prev) => {
+				let obj = { ...prev, [name]: [...optionArr] };
+				return obj;
+			});
+		}
+		if (name === "minExperience" || name === "minBasePay") {
+			setMultiSelectFilters((prev) => {
+				let obj = { ...prev, [name]: option };
+				return obj;
+			});
+		}
+	};
+	useEffect(() => {
+		runFilter();
+	}, [multiselectFilters, jobs]);
 	const ref = useIntersectionObserver(() => {
 		fetchJobs(
 			jobs.length,
@@ -49,7 +106,10 @@ const SearchJobs = () => {
 	}, []);
 	return (
 		<div>
-			<Filter handleFilterUpdate={handleFilterUpdate} />
+			<Filter
+				handleFilterUpdate={handleFilterUpdate}
+				runFilter={runFilter}
+			/>
 			<Box
 				display={"flex"}
 				flexWrap="wrap"

@@ -1,5 +1,6 @@
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import React, { useEffect, useState } from "react";
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -10,6 +11,7 @@ const MenuProps = {
 		},
 	},
 };
+
 const Chip = ({ selected }) => {
 	return (
 		<div
@@ -26,7 +28,8 @@ const Chip = ({ selected }) => {
 		</div>
 	);
 };
-const MultiSelectFilterDD = ({
+
+const SingleSelectDD = ({
 	children,
 	placeholder,
 	options,
@@ -34,39 +37,33 @@ const MultiSelectFilterDD = ({
 	suffixText,
 	name,
 }) => {
-	const [selectedOptions, setSelectedOptions] = useState([]);
+	const [selectedOption, setSelectedOption] = useState("");
+
 	const handleChange = (event) => {
-		setSelectedOptions(event.target.value);
+		setSelectedOption(event.target.value);
 	};
+
 	useEffect(() => {
-		handleFilterUpdate(name, selectedOptions, "");
-	}, [selectedOptions, name]);
+		handleFilterUpdate(name, [], selectedOption);
+	}, [selectedOption, name]);
+
 	return (
 		<div>
 			<FormControl sx={{ m: 1, width: "190px", flexWrap: "wrap" }}>
 				<InputLabel
 					sx={{ fontSize: "15px", fontFamily: "Lexend" }}
-					id="multi-select-label"
+					id="single-select-label"
 				>
 					{placeholder}
 				</InputLabel>
 				<Select
-					labelId="multi-select-label"
+					sx={{ fontFamily: "Lexend", fontSize: "14px" }}
+					labelId="single-select-label"
 					label={placeholder}
 					name={placeholder}
-					id="multi-select"
-					multiple
-					value={selectedOptions}
+					id="single-select"
+					value={selectedOption}
 					onChange={handleChange}
-					renderValue={(selected) => (
-						<Box
-							sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
-						>
-							{selected.map((value) => (
-								<Chip key={value} selected={value} />
-							))}
-						</Box>
-					)}
 					MenuProps={MenuProps}
 				>
 					{options &&
@@ -95,4 +92,4 @@ const MultiSelectFilterDD = ({
 	);
 };
 
-export default MultiSelectFilterDD;
+export default SingleSelectDD;

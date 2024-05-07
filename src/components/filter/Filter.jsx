@@ -1,8 +1,16 @@
 import { Box } from "@mui/material";
 import React from "react";
 import MultiSelectFilterDD from "../dropdown/MultiSelectFilterDD";
+import {
+	Roles,
+	minBasePay,
+	minExperience,
+	remote,
+	techStack,
+} from "../../constants/filterOptions";
+import SingleSelectDD from "../dropdown/SingleSelectDD";
 
-const Filter = ({ handleFilterUpdate }) => {
+const Filter = ({ handleFilterUpdate, runFilter }) => {
 	return (
 		<Box
 			marginTop={10}
@@ -12,33 +20,37 @@ const Filter = ({ handleFilterUpdate }) => {
 			gap={1}
 		>
 			<MultiSelectFilterDD
+				name="roles"
 				placeholder="Select Roles"
-				options={["Frontend", "backend", "Devops"]}
+				multiple={true}
+				options={Roles}
 				handleFilterUpdate={handleFilterUpdate}
 			/>
-			<MultiSelectFilterDD
+			<SingleSelectDD
 				placeholder="Min Experience"
-				options={["Frontend", "backend", "Devops"]}
-				handleFilterUpdate={handleFilterUpdate}
-			/>
-			<MultiSelectFilterDD
-				placeholder="Location"
-				options={["Frontend", "backend", "Devops"]}
+				name="minExperience"
+				options={minExperience}
+				suffixText="Years"
 				handleFilterUpdate={handleFilterUpdate}
 			/>
 			<MultiSelectFilterDD
 				placeholder="Remote"
-				options={["Frontend", "backend", "Devops"]}
+				name="remote"
+				multiple={true}
+				options={remote}
 				handleFilterUpdate={handleFilterUpdate}
 			/>
-			<MultiSelectFilterDD
+			{/* <MultiSelectFilterDD
 				placeholder="Tech Stack"
-				options={["Frontend", "backend", "Devops"]}
+				name="techstack"
+				options={techStack}
 				handleFilterUpdate={handleFilterUpdate}
-			/>
-			<MultiSelectFilterDD
+			/> */}
+			<SingleSelectDD
 				placeholder="Min Base Pay"
-				options={["Frontend", "backend", "Devops"]}
+				name="minBasePay"
+				options={minBasePay}
+				suffixText="k/yr"
 				handleFilterUpdate={handleFilterUpdate}
 			/>
 		</Box>
