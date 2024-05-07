@@ -2,7 +2,6 @@ import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 import "./index.css";
 import { Typography } from "@mui/material";
-import { JobContext } from "../../../contexts/JobContextProvider";
 const CompanyInfo = ({ logoUrl, companyName, jobRole, location }) => {
 	return (
 		<Box display="flex" gap={2} marginBottom={2} alignItems={"center"}>

@@ -35,6 +35,9 @@ const JobCardThemeProvider = ({ children }) => {
 						borderRadius: "8px",
 						fontWeight: 500,
 						padding: "8px",
+						":hover": {
+							backgroundColor: "rgb(60, 200, 170)",
+						},
 					},
 				},
 			},

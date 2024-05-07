@@ -1,12 +1,15 @@
-import './App.css'
-import SearchJobs from './views/searchjobview/SearchJobs'
+import "./App.css";
+import JobContextProvider from "./contexts/JobContextProvider";
+import SearchJobs from "./views/searchjobview/SearchJobs";
 
 function App() {
-  return (
-    <>
-      <SearchJobs/>
-    </>
-  )
+	return (
+		<>
+			<JobContextProvider>
+				<SearchJobs />
+			</JobContextProvider>
+		</>
+	);
 }
 
-export default App
+export default App;

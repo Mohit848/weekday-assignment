@@ -1,10 +1,10 @@
-import React, { useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 
 const useIntersectionObserver = (callback, deps) => {
 	const observer = useRef(null);
 	const ref = useCallback(
 		(node) => {
-			if (deps.every()) {
+			if (deps[0] && deps[1]) {
 				observer.current?.disconnect();
 				observer.current = new IntersectionObserver((entries) => {
 					if (entries[0].isIntersecting) {
@@ -18,6 +18,7 @@ const useIntersectionObserver = (callback, deps) => {
 		},
 		[callback, deps]
 	);
+	return ref;
 };
 
 export default useIntersectionObserver;

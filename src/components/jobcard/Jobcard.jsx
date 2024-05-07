@@ -11,7 +11,6 @@ import AboutCompany from "./aboutcompany/AboutCompany";
 import SalaryInfo from "./salaryinfo/SalaryInfo";
 import MinExperience from "./minimumexp/MinExperience";
 import EasyApplyButton from "./applybutton/EasyApplyButton";
-import JobContextProvider from "../../contexts/JobContextProvider";
 
 export const Jobcard = ({
 	jdLink,

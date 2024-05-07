@@ -1,52 +1,47 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Jobcard } from "../../components/jobcard/Jobcard";
-import { Box } from "@mui/material";
-import useFetchJobsOnLoad from "../../hooks/useFetchJobsOnLoad";
+import { Box, CircularProgress } from "@mui/material";
+import useIntersectionObserver from "../../hooks/useIntersectionObserver";
+import fetchJobs from "../../services/fetchJobs";
 
 const SearchJobs = () => {
-	// const [loading, setLoading] = useState(false);
-	// const [hasNext, setHasNext] = useState(true);
-	// const [error, setError] = useState("");
-	const { loading, error, jobs, totalJobs } = useFetchJobsOnLoad();
-	const lastCardRef = useRef(null);
-	//const [jobs, setJobs] = useState([]);
-	// const fetchJobs = async (limit, offset) => {
-	// 	setLoading(true);
-	// 	const myHeaders = new Headers();
-	// 	myHeaders.append("Content-Type", "application/json");
-	// 	const body = JSON.stringify({
-	// 		limit: limit,
-	// 		offset: offset,
-	// 	});
-	// 	const requestOptions = {
-	// 		method: "POST",
-	// 		headers: myHeaders,
-	// 		body,
-	// 	};
-	// 	let resp = null;
-	// 	try {
-	// 		resp = await fetch(
-	// 			`https://api.weekday.technology/adhoc/getSampleJdJSON`,
-	// 			requestOptions
-	// 		);
-	// 		const data = await resp.json();
-	// 		if (data.jdList + jobs.length >= totalJobs) {
-	// 			setHasNext(false);
-	// 		}
-	// 		setLoading(false);
-	// 		return data;
-	// 	} catch (err) {}
-	// };
-	// useEffect(() => {
-	// 	fetchJobs(10, 0).then((data) => {
-	// 		setJobs((prev) => {
-	// 			return [...prev, ...data.jdList];
-	// 		});
-	// 		setTotalJobs(data.totalCount);
-	// 	});
-	// 	return () => {};
-	// }, []);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(false);
+	const [jobs, setJobs] = useState([]);
+	const [totalJobs, setTotalJobs] = useState(0);
+	const [hasNext, setHasNext] = useState(true);
+	const ref = useIntersectionObserver(() => {
+		fetchJobs(
+			jobs.length,
+			jobs,
+			setJobs,
+			totalJobs,
+			setLoading,
+			setHasNext
+		).then((data) => {
+			setJobs((prev) => {
+				return [...prev, ...data.jdList];
+			});
+			setTotalJobs(data.totalCount);
+		});
+	}, [hasNext, !loading]);
 
+	useEffect(() => {
+		fetchJobs(
+			jobs.length,
+			jobs,
+			setJobs,
+			totalJobs,
+			setLoading,
+			setHasNext
+		).then((data) => {
+			setJobs((prev) => {
+				return [...prev, ...data.jdList];
+			});
+			setTotalJobs(data.totalCount);
+		});
+		return () => {};
+	}, []);
 	return (
 		<div>
 			<Box
@@ -56,21 +51,19 @@ const SearchJobs = () => {
 				gap={1}
 			>
 				{jobs &&
-					jobs.map((job, i) => {
+					jobs.map((job, i, jobs) => {
 						return (
 							<div
 								key={job.jdUid}
-								ref={i === jobs.length - 1 ? lastCardRef : null}
+								ref={jobs.length - 1 === i ? ref : null}
 							>
 								<Jobcard {...job} />
 							</div>
 						);
 					})}
 			</Box>
-
-			{totalJobs && <p>{totalJobs}</p>}
+			<Box textAlign={"center"}>{loading && <CircularProgress />}</Box>
 			{error && <p>Error occured</p>}
-			{loading && <p>Loading...</p>}
 		</div>
 	);
 };
