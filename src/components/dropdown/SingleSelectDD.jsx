@@ -39,6 +39,7 @@ const SingleSelectDD = ({
 }) => {
 	const [selectedOption, setSelectedOption] = useState("");
 
+	//Handelling state changes and invoking updation of filters state in SearchJobs comp
 	const handleChange = (event) => {
 		setSelectedOption(event.target.value);
 	};

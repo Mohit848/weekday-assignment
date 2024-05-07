@@ -35,6 +35,8 @@ const MultiSelectFilterDD = ({
 	name,
 }) => {
 	const [selectedOptions, setSelectedOptions] = useState([]);
+
+	//Handelling state changes and invoking updation of filters state in SearchJobs comp
 	const handleChange = (event) => {
 		setSelectedOptions(event.target.value);
 	};

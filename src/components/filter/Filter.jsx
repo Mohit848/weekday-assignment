@@ -9,6 +9,7 @@ import {
 	techStack,
 } from "../../constants/filterOptions";
 import SingleSelectDD from "../dropdown/SingleSelectDD";
+import SearchBox from "../searchbox/SearchBox";
 
 const Filter = ({ handleFilterUpdate, runFilter }) => {
 	return (
@@ -17,6 +18,7 @@ const Filter = ({ handleFilterUpdate, runFilter }) => {
 			display={"flex"}
 			flexWrap="wrap"
 			justifyContent={"center"}
+			alignItems={"center"}
 			gap={1}
 		>
 			<MultiSelectFilterDD
@@ -51,6 +53,11 @@ const Filter = ({ handleFilterUpdate, runFilter }) => {
 				name="minBasePay"
 				options={minBasePay}
 				suffixText="k/yr"
+				handleFilterUpdate={handleFilterUpdate}
+			/>
+			<SearchBox
+				placeholder="Company Name"
+				name="companyName"
 				handleFilterUpdate={handleFilterUpdate}
 			/>
 		</Box>

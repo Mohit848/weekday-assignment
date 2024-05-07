@@ -3,9 +3,7 @@ import { Jobcard } from "../../components/jobcard/Jobcard";
 import { Box, CircularProgress } from "@mui/material";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import fetchJobs from "../../services/fetchJobs";
-import MultiSelectFilterDD from "../../components/dropdown/MultiSelectFilterDD";
 import Filter from "../../components/filter/Filter";
-import { minBasePay, minExperience } from "../../constants/filterOptions";
 
 const SearchJobs = () => {
 	const [loading, setLoading] = useState(true);
@@ -13,14 +11,18 @@ const SearchJobs = () => {
 	const [jobs, setJobs] = useState([]);
 	const [totalJobs, setTotalJobs] = useState(0);
 	const [hasNext, setHasNext] = useState(true);
+	// Collecting all filters' state at a single place
 	const [multiselectFilters, setMultiSelectFilters] = useState({
 		roles: [],
 		remote: [],
 		minExperience: 0,
 		minBasePay: 0,
+		companyName: "",
 	});
+	// filteredJobs would be used as main array and runFilter will run
+	// on every initial Render, on New jobs load and every time filters update
+	// This can be shfted to other JS file to minimise cluttering of code
 	const [filteredJobs, setFilteredJobs] = useState(jobs);
-
 	const runFilter = () => {
 		let temp = jobs;
 
@@ -52,9 +54,17 @@ const SearchJobs = () => {
 					parseInt(exp.minJdSalary) >=
 						parseInt(multiselectFilters.minBasePay)
 				);
+			})
+			.filter((salary) => {
+				return (
+					multiselectFilters.companyName === "" ||
+					salary.companyName.includes(multiselectFilters.companyName)
+				);
 			});
 		setFilteredJobs(temp);
 	};
+
+	//This method is shared with every filter dropdown to track filter changes
 	const handleFilterUpdate = (name, optionArr, option) => {
 		if (name === "roles" || name === "remote") {
 			setMultiSelectFilters((prev) => {
@@ -62,16 +72,24 @@ const SearchJobs = () => {
 				return obj;
 			});
 		}
-		if (name === "minExperience" || name === "minBasePay") {
+		if (
+			name === "minExperience" ||
+			name === "minBasePay" ||
+			name === "companyName"
+		) {
 			setMultiSelectFilters((prev) => {
 				let obj = { ...prev, [name]: option };
 				return obj;
 			});
 		}
 	};
+
+	//tracks changes in jobs and multiselectfilter state
 	useEffect(() => {
 		runFilter();
 	}, [multiselectFilters, jobs]);
+
+	//Intersecton observer custom hook, fetches new jobs when last job is excountered on screen
 	const ref = useIntersectionObserver(() => {
 		fetchJobs(
 			jobs.length,
@@ -86,8 +104,9 @@ const SearchJobs = () => {
 			});
 			setTotalJobs(data.totalCount);
 		});
+		runFilter();
 	}, [hasNext, !loading]);
-
+	// To load jobs when page laods for the first time
 	useEffect(() => {
 		fetchJobs(
 			jobs.length,
@@ -102,8 +121,10 @@ const SearchJobs = () => {
 			});
 			setTotalJobs(data.totalCount);
 		});
+		runFilter();
 		return () => {};
 	}, []);
+
 	return (
 		<div>
 			<Filter
@@ -116,8 +137,8 @@ const SearchJobs = () => {
 				justifyContent={"center"}
 				gap={1}
 			>
-				{jobs &&
-					jobs.map((job, i, jobs) => {
+				{filteredJobs &&
+					filteredJobs.map((job, i, jobs) => {
 						return (
 							<div
 								key={job.jdUid}
@@ -129,7 +150,6 @@ const SearchJobs = () => {
 					})}
 			</Box>
 			<Box textAlign={"center"}>{loading && <CircularProgress />}</Box>
-			{error && <p>Error occured</p>}
 		</div>
 	);
 };
