@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import "./index.css";
 import { Typography } from "@mui/material";
 import { JobContext } from "../../../contexts/JobContextProvider";
-const CompanyInfo = ({ logoUrl, companyName, jobRole }) => {
+const CompanyInfo = ({ logoUrl, companyName, jobRole, location }) => {
 	return (
 		<Box display="flex" gap={2} marginBottom={2} alignItems={"center"}>
 			<img
@@ -18,7 +18,9 @@ const CompanyInfo = ({ logoUrl, companyName, jobRole }) => {
 				<Typography variant="body2" fontWeight={300}>
 					{jobRole.charAt(0).toUpperCase() + jobRole.slice(1)}
 				</Typography>
-				<Typography variant="subtitle2">India</Typography>
+				<Typography variant="subtitle2">
+					{location.charAt(0).toUpperCase() + location.slice(1)}
+				</Typography>
 			</div>
 		</Box>
 	);

@@ -43,6 +43,7 @@ export const Jobcard = ({
 								jobRole={jobRole}
 								companyName={companyName}
 								logoUrl={logoUrl}
+								location={location}
 							/>
 							<SalaryInfo
 								minJdSalary={minJdSalary}

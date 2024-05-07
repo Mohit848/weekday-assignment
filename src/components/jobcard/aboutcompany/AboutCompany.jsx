@@ -32,11 +32,9 @@ const AboutCompany = ({ jobDetailsFromCompany, jdLink }) => {
 				<Link href="#">Imo Nadeem</Link>
 			</Box>
 			<Box textAlign={"center"}>
-				<Link href="#">
-					<Typography variant="body2" fontWeight={300}>
-						<Link href={jdLink}>View Job</Link>
-					</Typography>
-				</Link>
+				<Typography variant="body2" fontWeight={300}>
+					<Link href={jdLink}>View Job</Link>
+				</Typography>
 			</Box>
 		</Box>
 	);

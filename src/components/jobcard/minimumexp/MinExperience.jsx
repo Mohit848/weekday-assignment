@@ -14,7 +14,7 @@ const MinExperience = ({ minExp, maxExp }) => {
 			{maxExp && (
 				<>
 					<Typography variant="body2" color={"#8b8b8b"}>
-						{`Minimum Experience: ${maxExp} Years`}
+						{`Maximum Experience: ${maxExp} Years`}
 					</Typography>
 				</>
 			)}
