@@ -104,7 +104,6 @@ const SearchJobs = () => {
 			});
 			setTotalJobs(data.totalCount);
 		});
-		runFilter();
 	}, [hasNext, !loading]);
 	// To load jobs when page laods for the first time
 	useEffect(() => {
@@ -121,7 +120,6 @@ const SearchJobs = () => {
 			});
 			setTotalJobs(data.totalCount);
 		});
-		runFilter();
 		return () => {};
 	}, []);
 
