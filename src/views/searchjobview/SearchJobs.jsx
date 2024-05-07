@@ -3,6 +3,8 @@ import { Jobcard } from "../../components/jobcard/Jobcard";
 import { Box, CircularProgress } from "@mui/material";
 import useIntersectionObserver from "../../hooks/useIntersectionObserver";
 import fetchJobs from "../../services/fetchJobs";
+import MultiSelectFilterDD from "../../components/dropdown/MultiSelectFilterDD";
+import Filter from "../../components/filter/Filter";
 
 const SearchJobs = () => {
 	const [loading, setLoading] = useState(true);
@@ -10,6 +12,9 @@ const SearchJobs = () => {
 	const [jobs, setJobs] = useState([]);
 	const [totalJobs, setTotalJobs] = useState(0);
 	const [hasNext, setHasNext] = useState(true);
+	const handleFilterUpdate = (name, optionArr) => {
+		console.log(name, " --- ", optionArr);
+	};
 	const ref = useIntersectionObserver(() => {
 		fetchJobs(
 			jobs.length,
@@ -44,6 +49,7 @@ const SearchJobs = () => {
 	}, []);
 	return (
 		<div>
+			<Filter handleFilterUpdate={handleFilterUpdate} />
 			<Box
 				display={"flex"}
 				flexWrap="wrap"
